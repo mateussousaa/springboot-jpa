@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,17 +16,21 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
     private String email;
     private String phone;
     private String password;
 
+    //    @OneToMany(mappedBy = "client")
+    private final List<Order> orders = new ArrayList<>();
+
     public User() {
     }
 
-    public User(String name, String email, String phone, String password) {
+    public User(Long id, String name, String email, String phone, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -63,11 +69,15 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id;
+        return Objects.equals(id, user.id);
     }
 
     @Override
